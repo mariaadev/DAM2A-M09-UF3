@@ -42,6 +42,8 @@ public class ServidorXat {
     }
 
     public void finalitzarXat() {
+        if (sortir) return; 
+        sortir = true;
         System.out.println("Tancant tots els clients.");
         enviarMissatgeGrup("DEBUG: multicast sortir");
 
@@ -52,7 +54,7 @@ public class ServidorXat {
         }
 
         clients.clear();
-        sortir = true;
+
 
         try {
             pararServidor();
@@ -60,14 +62,14 @@ public class ServidorXat {
             System.out.println("Error finalitzant el servidor.");
         }
 
-        System.exit(0); // Finalitzem l'aplicació
+        System.exit(0); 
     }
 
     public void afegirClient(GestorClients gestorClient) {
         String nom = gestorClient.getNom();
         if (!clients.containsKey(nom)) {
             clients.put(nom, gestorClient);
-            enviarMissatgeGrup("DEBUG: multicast Entra: " + nom);
+            System.out.println(nom + " connectat.");
         }
     }
 
@@ -93,6 +95,11 @@ public class ServidorXat {
             System.out.println("Destinatari no trobat: " + nomDestinatari);
         }
     }
+
+    public boolean teClientAmbNom(String nom) {
+    return clients.containsKey(nom);
+}
+
 
     public static void main(String[] args) {
         ServidorXat servidor = new ServidorXat();

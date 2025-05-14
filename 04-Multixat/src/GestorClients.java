@@ -51,7 +51,9 @@ public class GestorClients extends Thread {
 
     public void enviarMissatge(String remitent, String msg) {
         try {
+            System.out.println("Enviant missatge: " + msg);
             sortida.writeObject(Missatge.getMissatgePersonal(remitent, msg));
+           
         } catch (IOException e) {
             System.out.println("No s'ha pogut enviar el missatge a " + nom);
         }
@@ -64,10 +66,19 @@ public class GestorClients extends Thread {
 
         switch (codi) {
             case Missatge.CODI_CONECTAR:
-                this.nom = parts[1];
-                servidorXat.afegirClient(this);
-                servidorXat.enviarMissatgeGrup("DEBUG: multicast Entra: " + this.nom);
+            if (!"Desconegut".equals(this.nom)) break; 
+
+            this.nom = parts[1];
+            if (servidorXat.teClientAmbNom(nom)) {
+                try {
+                    this.enviarMissatge("Servidor", "Nom ja en ús. Sortint...");
+                } catch (Exception ignored) {}
+                sortir = true;
                 break;
+            }
+
+            servidorXat.afegirClient(this);
+            break;
 
             case Missatge.CODI_SORTIR_CLIENT:
                 sortir = true;

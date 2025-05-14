@@ -71,9 +71,13 @@ public class ClientXat {
                         case Missatge.CODI_SORTIR_TOTS:
                             sortir = true;
                             break;
-                        case Missatge.CODI_MSG_PERSONAL:
-                            System.out.println("Missatge de (" + parts[1] + "): " + parts[2]);
+                      case Missatge.CODI_MSG_PERSONAL:
+                        if ("sortir".equals(parts[2])) {
+                            sortir = true;
                             break;
+                        }
+                        System.out.println("Missatge de (" + parts[1] + "): " + parts[2]);
+                        break;
                         case Missatge.CODI_MSG_GRUP:
                             System.out.println(parts[1]);
                             break;
