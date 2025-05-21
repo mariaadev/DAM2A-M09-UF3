@@ -21,10 +21,12 @@ public class ServidorXat {
                 System.out.println("Client connectat: " + socketClient.getInetAddress());
 
                 GestorClients gestor = new GestorClients(socketClient, this);
-                gestor.start();  // Iniciem el fil per gestionar el client
+                gestor.start();
             }
         } catch (IOException e) {
+             if (!sortir) { 
             System.out.println("Error al servidor: " + e.getMessage());
+    }
         } finally {
             pararServidor();
         }
@@ -45,8 +47,8 @@ public class ServidorXat {
         if (sortir) return; 
         sortir = true;
         System.out.println("Tancant tots els clients.");
-        enviarMissatgeGrup("DEBUG: multicast sortir");
 
+        System.out.println("DEBUG: multicast sortir");
         for (GestorClients client : clients.values()) {
             try {
                 client.enviarMissatge("Servidor", MSG_SORTIR);
@@ -62,7 +64,6 @@ public class ServidorXat {
             System.out.println("Error finalitzant el servidor.");
         }
 
-        System.exit(0); 
     }
 
     public void afegirClient(GestorClients gestorClient) {
@@ -104,5 +105,6 @@ public class ServidorXat {
     public static void main(String[] args) {
         ServidorXat servidor = new ServidorXat();
         servidor.servidorAEscoltar();
+        servidor.pararServidor();
     }
 }

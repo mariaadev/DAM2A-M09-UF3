@@ -36,7 +36,7 @@ public class GestorClients extends Thread {
                 processaMissatge(missatge);
             }
         } catch (Exception e) {
-            System.out.println("Error al client: " + nom + " -> " + e.getMessage());
+           
         } finally {
             try {
                 entrada.close();
@@ -70,9 +70,7 @@ public class GestorClients extends Thread {
 
             this.nom = parts[1];
             if (servidorXat.teClientAmbNom(nom)) {
-                try {
-                    this.enviarMissatge("Servidor", "Nom ja en ús. Sortint...");
-                } catch (Exception ignored) {}
+                enviarMissatge("Servidor", "Nom ja en ús. Sortint...");
                 sortir = true;
                 break;
             }

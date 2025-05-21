@@ -70,6 +70,8 @@ public class ClientXat {
                     switch (codi) {
                         case Missatge.CODI_SORTIR_TOTS:
                             sortir = true;
+                            System.out.println("Error rebent missatge. Sortint...");
+                            tancarClient();
                             break;
                       case Missatge.CODI_MSG_PERSONAL:
                         if ("sortir".equals(parts[2])) {
@@ -86,9 +88,12 @@ public class ClientXat {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Error rebent missatge. Sortint...");
+                if (!sortir) {
+                    System.out.println("Error rebent missatge. Sortint...");
+                }
                 sortir = true;
             }
+        
         }).start();
     }
 
@@ -118,19 +123,15 @@ public class ClientXat {
         client.iniciarRecepcio();
         client.ajuda();
 
-        boolean sortir = false;
-        while (!sortir) {
+        while (!client.sortir) {
             String opcio = scanner.nextLine().trim();
             switch (opcio) {
                 case "":
-                case "4":
-                    client.enviarMissatge(Missatge.getMissatgeSortirClient("Adéu"));
-                    sortir = true;
-                    break;
                 case "1":
                     System.out.print("Introdueix el nom: ");
                     String nom = scanner.nextLine().trim();
                     client.enviarMissatge(Missatge.getMissatgeConectar(nom));
+                    client.ajuda();
                     break;
                 case "2":
                     System.out.print("Destinatari:: ");
@@ -138,15 +139,21 @@ public class ClientXat {
                     System.out.print("Missatge a enviar: ");
                     String msg = scanner.nextLine();
                     client.enviarMissatge(Missatge.getMissatgePersonal(desti, msg));
+                    client.ajuda();
                     break;
                 case "3":
                     System.out.print("Missatge a enviar al grup: ");
                     String msgGrup = scanner.nextLine();
                     client.enviarMissatge(Missatge.getMissatgeGrup(msgGrup));
+                    client.ajuda();
+                    break;
+                case "4":
+                    client.enviarMissatge(Missatge.getMissatgeSortirClient("Adéu"));
+                    client.sortir = true;
                     break;
                 case "5":
                     client.enviarMissatge(Missatge.getMissatgeSortirTots("Adéu"));
-                    sortir = true;
+                    client.sortir = true;
                     break;
                 default:
                     client.ajuda();
