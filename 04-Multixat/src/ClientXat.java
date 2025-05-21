@@ -87,6 +87,7 @@ public class ClientXat {
                             System.out.println("Error: codi no reconegut");
                     }
                 }
+                
             } catch (Exception e) {
                 if (!sortir) {
                     System.out.println("Error rebent missatge. Sortint...");
